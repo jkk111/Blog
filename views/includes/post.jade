@@ -1,0 +1,20 @@
+.post
+  a(href="/post/#{post.id}")
+    h2 #{post.title}
+  for paragraph in post.body
+    p #{paragraph}
+  footer Posted: #{post.created}
+    unless singleView
+      a.comments(href="/post/#{post.id}#comments") Comments(#{post.comments.length})
+if singleView
+  #comments
+    h3 Comments:
+    for comment in post.comments
+      include ./comments.jade
+    if(post.comments.length == 0)
+      p No Comments Yet.
+  form(method="post", id="commentForm", action="/post/#{post.id}/addComment")
+    label Name:
+    input(type="text" name="name" placeholder="name")
+    textarea(name="comment", form="commentForm" placeholder="Enter Comment Here...")
+    input(type="submit" id="commentButton")

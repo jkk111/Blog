@@ -1,0 +1,9 @@
+p Search Posts
+  form(method="post" action="/search")
+    input(type="text", name="query", placeholder="Search...")
+    input(type="submit" value="Search")
+    #searchIn
+      label Titles:
+      input(type="radio" name="search" value="Titles" checked)
+      label Titles and posts:
+      input(type="radio" name="search" value="Both")
