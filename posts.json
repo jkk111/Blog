@@ -1,16 +1,32 @@
-[
-	{
-		"id": 0,
-		"title": "365 days of commits",
-		"body": [
-			"So early this week I was writing some random code, and I thought to myself, I have a ton of dead code thats going nowhere, so I came up with a solution.",
-			"Just push everything to github, the good, the bad and the ugly. I then decided to expand on this, write some piece of code and publish it every day for a year.",
-			"My rules for this challenge are simple, write any code each day, it can be a new project or an addition to a project. As long as something new is added each day.",
-			"I'm 7 days in now and I'm barely scratching the surface of what I want to be doing, with a tiny amount of java and a lot of nodejs, I'll need to start mixing it up soon too!",
-			"So watch this space for a mix of servers, random crawlers, exploits and whatever else I can come up with."
-		],
-		"comments": [
-		],
-		"created": "Sun Feb 14 2016 12:35:13"
-	}
-]
+{
+  "posts": [
+    {
+  		"id": 0,
+  		"title": "365 days of commits",
+  		"body": [
+  			"So early this week I was writing some random code, and I thought to myself, I have a ton of dead code thats going nowhere, so I came up with a solution.",
+  			"Just push everything to github, the good, the bad and the ugly. I then decided to expand on this, write some piece of code and publish it every day for a year.",
+  			"My rules for this challenge are simple, write any code each day, it can be a new project or an addition to a project. As long as something new is added each day.",
+  			"I'm 7 days in now and I'm barely scratching the surface of what I want to be doing, with a tiny amount of java and a lot of nodejs, I'll need to start mixing it up soon too!",
+  			"So watch this space for a mix of servers, random crawlers, exploits and whatever else I can come up with."
+  		],
+  		"comments": [
+  			{
+  				"name": "TOPKEK",
+  				"text": "Adam is a cuck",
+  				"posted": "Mon Feb 15 2016 9:57:8",
+  				"id": 0
+  			},
+  			{
+  				"name": "kekek",
+  				"text": "aspdkjapsdh",
+  				"posted": "Mon Feb 15 2016 9:57:26",
+  				"id": 1
+  			}
+  		],
+      "nextComment": 2,
+  		"created": "Sun Feb 14 2016 12:35:13"
+  	}
+  ],
+  "nextPost": 1
+}
