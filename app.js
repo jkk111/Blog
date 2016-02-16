@@ -4,6 +4,7 @@ var jade = require("jade");
 var fs = require("fs");
 var cookieParser = require("cookie-parser");
 var app = express();
+var NUM_PER_PAGE = Number.MAX_VALUE;
 app.use(cookieParser())
 var config;
 try {
@@ -30,14 +31,14 @@ app.set("view engine", "jade");
 app.use(express.static("static/"));
 app.use(bp.urlencoded({extended: true}));
 app.get("/", function(req, res) {
-  res.render("index", { posts: posts, singleView: false });
+  res.render("index", { posts: trimPosts(posts.reverse()), singleView: false });
 });
 
 app.get("/post/:id", function(req, res) {
   var id = req.params.id;
   var post = findPost(id);
   if(post) {
-    res.render("index", { posts: post, singleView: true });
+    res.render("index", { posts: post, singleView: true,  });
   } else {
     res.sendStatus(404);
   }
@@ -108,6 +109,20 @@ function pruneDuplicates(arr) {
   return results;
 }
 
+function trimPosts(posts, page) {
+  if(page)
+    page--;
+  else
+    page = 0;
+  var base = page * NUM_PER_PAGE;
+  var max = base + NUM_PER_PAGE;
+  var result = [];
+  for(var i = base ; i < max && i < posts.length; i++) {
+    result.push(posts[i]);
+  }
+  return result;
+}
+
 function searchAllKeys(str, titlesOnly) {
   var keys = str.split(" ");
   var results = [];
@@ -132,23 +147,36 @@ function searchAllKeys(str, titlesOnly) {
 app.post("/search", function(req, res) {
   if(req.body.search == "Titles") {
     var search = searchAllKeys(req.body.query, true);
-      res.render('index', { posts: search, singleView: search.length == 1 });
+      res.render('index', { posts: trimPosts(search.reverse()), singleView: search.length == 1 });
     } else {
     var search = searchAllKeys(req.body.query, false);
-    res.render("index", { posts: search, singleView: search.length == 1 });
+    res.render("index", { posts: trimPosts(search.reverse()), singleView: search.length == 1 });
   }
 });
 
 app.get("/post", auth, function(req, res) {
   res.render("post");
 });
-
 app.post("/post", auth, function(req, res) {
-
+  var post = {};
+  post.title = req.body.title;
+  if(req.body.body.indexOf("\r\n") != -1)
+    post.body = req.body.body.split("\r\n\r\n");
+  else
+    post.body = req.body.body.split("\n\n");
+  post.nextComment = 0;
+  post.comments = [];
+  post.created = getPostTime();
+  var id = addPost(post);
+  res.redirect("/post/" + id);
 });
 
 function addPost(post) {
-
+  var id = nextPost++;
+  post.id = id;
+  posts.push(post);
+  save();
+  return id;
 }
 
 function findPost(id) {
@@ -176,7 +204,7 @@ function addComment(id, comment) {
 }
 
 function save() {
-  fs.writeFileSync("posts.json", JSON.stringify(posts, null, "\t"), "utf8");
+  fs.writeFileSync("posts.json", JSON.stringify({ posts: posts, nextPost: nextPost }, null, "\t"), "utf8");
 }
 
 app.listen(80);
