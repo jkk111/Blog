@@ -4,8 +4,9 @@ var jade = require("jade");
 var fs = require("fs");
 var cookieParser = require("cookie-parser");
 var app = express();
-var NUM_PER_PAGE = Number.MAX_VALUE;
-app.use(cookieParser())
+var NUM_PER_PAGE = 30; //Number.MAX_VALUE;
+app.use(cookieParser());
+
 var config;
 try {
   config = JSON.parse(fs.readFileSync("config.json", "utf8"));
@@ -17,6 +18,7 @@ try {
 var auth = require("node-auth")(config);
 var posts;
 var nextPost;
+
 try {
   posts = JSON.parse(fs.readFileSync("posts.json", "utf8"));
   nextPost = posts.nextPost || 0;
@@ -26,6 +28,7 @@ try {
   fs.writeFileSync("posts.json", "{}", "utf8");
   process.exit();
 }
+
 app.set("views", __dirname + "/views");
 app.set("view engine", "jade");
 app.use(express.static("static/"));
@@ -157,6 +160,7 @@ app.post("/search", function(req, res) {
 app.get("/post", auth, function(req, res) {
   res.render("post");
 });
+
 app.post("/post", auth, function(req, res) {
   var post = {};
   post.title = req.body.title;
@@ -207,9 +211,6 @@ function save() {
   fs.writeFileSync("posts.json", JSON.stringify({ posts: posts, nextPost: nextPost }, null, "\t"), "utf8");
 }
 
-app.listen(80);
-
-
 function getPostTime() {
   var t = new Date();
   var days = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"]
@@ -223,3 +224,5 @@ function getPostTime() {
   var second = t.getSeconds();
   return day + " " + month + " " + date + " " + year + " " + hour + ":" + minute + ":" + second;
 }
+
+module.exports = app;
