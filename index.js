@@ -9,10 +9,10 @@ app.use(cookieParser());
 
 var config;
 try {
-  config = JSON.parse(fs.readFileSync("config.json", "utf8"));
+  config = JSON.parse(fs.readFileSync(__dirname + "/config.json", "utf8"));
 } catch(e) {
   config = {username: "user", password: "pass"};
-  fs.writeFileSync("config.json", JSON.stringify(config, null, "\t"), "utf8");
+  fs.writeFileSync(__dirname + "/config.json", JSON.stringify(config, null, "\t"), "utf8");
 }
 
 var auth = require("node-auth")(config);
@@ -20,18 +20,18 @@ var posts;
 var nextPost;
 
 try {
-  posts = JSON.parse(fs.readFileSync("posts.json", "utf8"));
+  posts = JSON.parse(fs.readFileSync(__dirname + "/posts.json", "utf8"));
   nextPost = posts.nextPost || 0;
   posts = posts.posts;
 } catch(e) {
   console.log(e);
-  fs.writeFileSync("posts.json", "{}", "utf8");
+  fs.writeFileSync(__dirname + "/posts.json", "{}", "utf8");
   process.exit();
 }
 
 app.set("views", __dirname + "/views");
 app.set("view engine", "jade");
-app.use(express.static("static/"));
+app.use(express.static(__dirname + "/static"));
 app.use(bp.urlencoded({extended: true}));
 app.get("/", function(req, res) {
   res.render("index", { posts: trimPosts(posts.reverse()), singleView: false });
@@ -208,7 +208,7 @@ function addComment(id, comment) {
 }
 
 function save() {
-  fs.writeFileSync("posts.json", JSON.stringify({ posts: posts, nextPost: nextPost }, null, "\t"), "utf8");
+  fs.writeFileSync(__dirname + "/posts.json", JSON.stringify({ posts: posts, nextPost: nextPost }, null, "\t"), "utf8");
 }
 
 function getPostTime() {

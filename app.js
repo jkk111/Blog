@@ -28,7 +28,7 @@ try {
 }
 app.set("views", __dirname + "/views");
 app.set("view engine", "jade");
-app.use(express.static("static/"));
+app.use("/blog", express.static("static/"));
 app.use(bp.urlencoded({extended: true}));
 app.get("/", function(req, res) {
   res.render("index", { posts: trimPosts(posts.reverse()), singleView: false });
