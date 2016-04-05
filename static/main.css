@@ -28,6 +28,9 @@ header a h1 {
 body, a {
     color: #0a0;
 }
+textarea {
+  box-sizing: border-box;
+}
 
 h2 {
   color: #217521;
